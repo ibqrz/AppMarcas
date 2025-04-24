@@ -16,6 +16,5 @@ namespace AppMarcas.Models
         [NotNull]
         public string marNome { get; set; }
 
-        public string marObservacoes { get; set; }
     }
 }
