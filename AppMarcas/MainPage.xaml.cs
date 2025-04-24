@@ -1,25 +1,64 @@
 ﻿
+using System.Collections.ObjectModel;
 using AppMarcas.Models;
 
 namespace AppMarcas
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
+        ObservableCollection<Marca> lista = new ObservableCollection<Marca>();
+        
+        
+        /* ou - trabalha de maneira não assincrona:  
+          List<Marca> lista = new List<Marca>(); */
 
         public MainPage()
         {
             InitializeComponent();
+
+            listMarcas.ItemsSource = lista;
         }
 
-        private void btnInserirOnClicked(object sender, EventArgs e)
+        protected override async void OnAppearing()
+        {
+           await carregarListaMarcas();
+        }
+
+        private async Task carregarListaMarcas()
+        {
+            List<Marca> tmp = await App.Db.GetAll();
+
+            lista.Clear();
+
+            foreach (Marca marca in tmp) 
+            {
+                lista.Add(marca);
+            }
+        }
+
+        private async void btnInserirOnClicked(object sender, EventArgs e)
         {
             Marca mar = new Marca();
             mar.marNome = txtMarNome.Text;
-            mar.marObservacoes = txtMarObs.Text;
 
-            App.Db.Insert(mar);
-            DisplayAlert("Sucesso!", "Registro inserido.", "OK");
+            await App.Db.Insert(mar);
+            await DisplayAlert("Sucesso!", "Registro inserido.", "OK");
+
+            OnAppearing();
+        }
+
+        private async void txtSearchTextChanged(object sender, TextChangedEventArgs e)
+        {
+            string q = e.NewTextValue;
+
+            lista.Clear();
+
+            List<Marca> tmp = await App.Db.Search(q);
+
+            foreach (Marca marca in tmp)
+            {
+                lista.Add(marca);
+            }
         }
     }
 }

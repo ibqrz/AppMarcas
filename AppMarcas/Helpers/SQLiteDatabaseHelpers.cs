@@ -26,9 +26,9 @@ namespace AppMarcas.Helpers
 
         public Task<List<Marca>> Update(Marca p) 
         {
-            string sql = "UPDATE Marca SET marNome=? and marObservacoes=? WHERE marId=?";
+            string sql = "UPDATE Marca SET marNome=? WHERE marId=?";
             
-            return _conn.QueryAsync<Marca>(sql, p.marNome, p.marObservacoes, p.marId);
+            return _conn.QueryAsync<Marca>(sql, p.marNome, p.marId);
         }
 
         public Task<int> Delete(int p) 
@@ -47,7 +47,7 @@ namespace AppMarcas.Helpers
 
         public Task<List<Marca>> Search(string p) 
         {
-            string sql = "SELECT * FROM Marca WHERE marNome LIKE %'" + p + "'%";
+            string sql = "SELECT * FROM Marca WHERE marNome LIKE '%" + p + "%'";
 
             return _conn.QueryAsync<Marca>(sql);
         }
