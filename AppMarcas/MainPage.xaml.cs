@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.ObjectModel;
 using AppMarcas.Models;
+using AppMarcas.Views;
 
 namespace AppMarcas
 {
@@ -59,6 +60,43 @@ namespace AppMarcas
             {
                 lista.Add(marca);
             }
+        }
+
+        private async void btnRemover(object sender, EventArgs e)
+        {
+            MenuItem selecionado = sender as MenuItem;
+            Marca p = selecionado.BindingContext as Marca;
+
+            bool confirma = await DisplayAlert("Atenção", "Confirma a remoção?", "Sim", "Não");
+
+            if (confirma == true)
+            {
+                await App.Db.Delete(p.marId);
+                await DisplayAlert("Aviso", "Registro removido!", "Ok");
+
+                await carregarListaMarcas();
+            }
+        }
+        private void btnLimparOnClicked(object sender, EventArgs e)
+        {
+            txtMarId.Text = String.Empty;
+            txtMarNome.Text = String.Empty;
+        }
+
+        private void listMarcasItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            Marca p = e.SelectedItem as Marca;
+
+            txtMarId.Text = p.marId.ToString();
+            txtMarNome.Text = p.marNome.ToString();
+        }
+
+        private void btnAlterar(object sender, EventArgs e)
+        {
+            MenuItem selecionado = sender as MenuItem;
+            Marca p = selecionado.BindingContext as Marca;
+
+            Navigation.PushAsync(new Views.MarcaEditar { BindingContext = p });
         }
     }
 }
