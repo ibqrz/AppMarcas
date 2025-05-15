@@ -11,15 +11,16 @@
             <Label x:Name="lblMarId" Text="ID:"/>
             <Entry x:Name="txtMarId"/>
 
-            <Label x:Name="lblMarNome" Text="Nome: "/>
+            <Label x:Name="lblMarNome" Text="Nome: " />
             <Entry x:Name="txtMarNome"/>
 
 
             <Button x:Name="btnInserir" Text="Inserir" Clicked="btnInserirOnClicked"/>
-
+            <Button x:Name="btnLimpar" Text="Limpar" Clicked="btnLimparOnClicked"/>
+            
             <SearchBar x:Name="txtSearch" Placeholder="Digite o nome da marca" TextChanged="txtSearchTextChanged" />
 
-            <ListView x:Name="listMarcas">
+            <ListView x:Name="listMarcas" ItemSelected="listMarcasItemSelected">
                 <ListView.Header>
                     <Grid ColumnDefinitions="*, *">
                         <Label Grid.Column="0" Text="ID"/>
@@ -30,6 +31,11 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
+                            <ViewCell.ContextActions>
+                                <MenuItem Text="Remover" Clicked="btnRemover"/>
+                                <MenuItem Text="Alterar" Clicked="btnAlterar"/>
+                            </ViewCell.ContextActions>
+                            
                             <Grid ColumnDefinitions="*, *">
                                 <Label Grid.Column="0" Text="{Binding marId}"/>
                                 <Label Grid.Column="1" Text="{Binding marNome}"/>
